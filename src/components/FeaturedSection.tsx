@@ -47,7 +47,8 @@ export default function FeaturedSection() {
         style={{ background: 'linear-gradient(to right, transparent, rgba(193,127,69,0.3), transparent)' }}
       />
 
-      <div className="relative z-10 max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      <div className="relative z-10 w-full flex justify-center">
+        <div className="max-w-7xl w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
 
         {/* ── Left — text content ───────────────────────────────────────── */}
         <div className="flex flex-col justify-center order-2 lg:order-1">
@@ -208,6 +209,7 @@ export default function FeaturedSection() {
             <CoffeeCup3D />
           </Suspense>
         </motion.div>
+        </div>
       </div>
 
       {/* ── Bottom divider ────────────────────────────────────────────── */}

@@ -42,12 +42,16 @@ export default function HeroSection() {
           initial="hidden"
           animate="visible"
           custom={0.1}
-          className="inline-flex items-center gap-2 mb-8 px-4 py-1.5 rounded-full border text-xs tracking-widest uppercase"
+          className="inline-flex items-center gap-2 mb-8 rounded-full border text-xs tracking-widest uppercase"
           style={{
             borderColor: 'rgba(193,127,69,0.35)',
             color: 'var(--color-coffee-accent)',
             background: 'rgba(193,127,69,0.08)',
             fontFamily: 'var(--font-body)',
+            paddingLeft: '1rem',
+            paddingRight: '1rem',
+            paddingTop: '0.375rem',
+            paddingBottom: '0.375rem',
           }}
         >
           <span className="w-1.5 h-1.5 rounded-full" style={{ background: 'var(--color-coffee-accent)' }} />
@@ -95,12 +99,15 @@ export default function HeroSection() {
           initial="hidden"
           animate="visible"
           custom={0.5}
-        className="max-w-xl mx-auto mb-12 leading-relaxed text-center"
+          className="mb-12 leading-relaxed text-center"
           style={{
             fontFamily: 'var(--font-body)',
             fontSize: 'clamp(1rem, 2vw, 1.15rem)',
             color: 'var(--color-cream-muted)',
             fontWeight: 300,
+            maxWidth: '42rem',
+            marginLeft: 'auto',
+            marginRight: 'auto',
           }}
         >
           From single-origin pour overs to bold espresso blends — every cup is a
@@ -120,12 +127,16 @@ export default function HeroSection() {
             whileHover={{ scale: 1.04, boxShadow: '0 0 32px rgba(193,127,69,0.35)' }}
             whileTap={{ scale: 0.97 }}
             transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-            className="px-8 py-3.5 rounded-full text-sm font-medium tracking-wide cursor-pointer"
+            className="rounded-full text-sm font-medium tracking-wide cursor-pointer"
             style={{
               background: 'var(--color-coffee-accent)',
               color: 'var(--color-coffee-black)',
               fontFamily: 'var(--font-body)',
               letterSpacing: '0.05em',
+              paddingLeft: '2rem',
+              paddingRight: '2rem',
+              paddingTop: '0.875rem',
+              paddingBottom: '0.875rem',
             }}
           >
             Explore the Menu
@@ -136,13 +147,17 @@ export default function HeroSection() {
             whileHover={{ scale: 1.04 }}
             whileTap={{ scale: 0.97 }}
             transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-            className="px-8 py-3.5 rounded-full text-sm font-medium tracking-wide border cursor-pointer"
+            className="rounded-full text-sm font-medium tracking-wide border cursor-pointer"
             style={{
               borderColor: 'rgba(245,234,216,0.2)',
               color: 'var(--color-cream)',
               fontFamily: 'var(--font-body)',
               letterSpacing: '0.05em',
               background: 'transparent',
+              paddingLeft: '2rem',
+              paddingRight: '2rem',
+              paddingTop: '0.875rem',
+              paddingBottom: '0.875rem',
             }}
           >
             Our Story

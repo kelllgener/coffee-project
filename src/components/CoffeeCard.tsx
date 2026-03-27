@@ -13,12 +13,13 @@ export default function CoffeeCard({ coffee }: CoffeeCardProps) {
       whileHover="hover"
       initial="rest"
       animate="rest"
-      className="relative group flex flex-col justify-between rounded-2xl p-6 overflow-hidden cursor-default"
+      className="relative group flex flex-col justify-between rounded-2xl overflow-hidden cursor-default"
       style={{
         background: 'rgba(26,16,8,0.7)',
         border: '1px solid rgba(193,127,69,0.12)',
         backdropFilter: 'blur(12px)',
         minHeight: '280px',
+        padding: '1.5rem',
       }}
     >
       {/* ── Hover glow layer ──────────────────────────────────────────── */}
@@ -120,12 +121,16 @@ export default function CoffeeCard({ coffee }: CoffeeCardProps) {
         {coffee.tags.map((tag) => (
           <span
             key={tag}
-            className="px-3 py-1 rounded-full text-xs tracking-wide"
+            className="rounded-full text-xs tracking-wide"
             style={{
               background: 'rgba(193,127,69,0.1)',
               border: '1px solid rgba(193,127,69,0.2)',
               color: 'var(--color-cream-muted)',
               fontFamily: 'var(--font-body)',
+              paddingLeft: '0.75rem',
+              paddingRight: '0.75rem',
+              paddingTop: '0.25rem',
+              paddingBottom: '0.25rem',
             }}
           >
             {tag}

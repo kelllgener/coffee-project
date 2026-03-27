@@ -26,7 +26,8 @@ export default function CoffeeGrid() {
         }}
       />
 
-      <div className="relative z-10 max-w-7xl mx-auto">
+      <div className="relative z-10 w-full flex justify-center">
+        <div className="max-w-7xl w-full">
 
         {/* ── Section heading ──────────────────────────────────────────── */}
         <div ref={headingRef} className="mb-16 text-center">
@@ -107,6 +108,7 @@ export default function CoffeeGrid() {
         >
           Sourced ethically. Roasted locally. Served with care.
         </motion.p>
+        </div>
       </div>
     </section>
   )
