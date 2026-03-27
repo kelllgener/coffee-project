@@ -16,6 +16,7 @@ export default function HeroSection() {
         style={{
           background:
             'radial-gradient(ellipse 80% 60% at 50% 60%, rgba(124,74,45,0.28) 0%, transparent 70%)',
+            paddingLeft: "1.5rem", paddingRight: "1.5rem"
         }}
       />
 

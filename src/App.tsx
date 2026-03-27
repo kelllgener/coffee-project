@@ -14,7 +14,7 @@ export default function App() {
   const [loaded, setLoaded] = useState(false)
 
   return (
-    <div className="mx-4 md:mx-0">
+    <div className="px-6 sm:px-8 md:px-0">
       {/* Loading screen — unmounts after animation completes */}
       <LoadingScreen onComplete={() => setLoaded(true)} />
 
@@ -33,12 +33,16 @@ export default function App() {
               <RevealSection>
                 <HeroSection />
               </RevealSection>
-              <RevealSection margin="-60px">
-                <CoffeeGrid />
-              </RevealSection>
-              <RevealSection margin="-100px">
-                <FeaturedSection />
-              </RevealSection>
+              <section id="coffee-grid">
+                <RevealSection margin="-60px">
+                  <CoffeeGrid />
+                </RevealSection>
+              </section>
+              <section id="featured-section">
+                <RevealSection margin="-100px">
+                  <FeaturedSection />
+                </RevealSection>
+              </section>
             </main>
             <RevealSection margin="-100px">
               <Footer />

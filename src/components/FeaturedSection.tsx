@@ -28,9 +28,14 @@ export default function FeaturedSection() {
 
   return (
     <section
+      id="featured"
       ref={sectionRef}
       className="relative min-h-screen flex items-center overflow-hidden px-6 py-24"
-      style={{ background: "var(--color-coffee-dark)" }}
+      style={{
+        background: "var(--color-coffee-dark)",
+        paddingLeft: "1.5rem",
+        paddingRight: "1.5rem",
+      }}
     >
       {/* ── Background glow ───────────────────────────────────────────── */}
       <motion.div
@@ -61,133 +66,132 @@ export default function FeaturedSection() {
           {/* ── Left — text content ───────────────────────────────────────── */}
           <RevealSection margin="-100px" delay={0}>
             <div className="flex flex-col justify-center order-2 lg:order-1">
-            <motion.p
-              variants={fadeUp}
-              initial="hidden"
-              animate={isInView ? "visible" : "hidden"}
-              custom={0.1}
-              className="mb-4 text-xs tracking-[0.3em] uppercase"
-              style={{
-                color: "var(--color-coffee-accent)",
-                fontFamily: "var(--font-body)",
-              }}
-            >
-              Featured
-            </motion.p>
-
-            <motion.h2
-              variants={fadeUp}
-              initial="hidden"
-              animate={isInView ? "visible" : "hidden"}
-              custom={0.2}
-              className="mb-6 leading-tight"
-              style={{
-                fontFamily: "var(--font-display)",
-                fontSize: "clamp(2.2rem, 5vw, 3.8rem)",
-                color: "var(--color-cream-light)",
-                fontWeight: 700,
-              }}
-            >
-              The art of{" "}
-              <em
+              <motion.p
+                variants={fadeUp}
+                initial="hidden"
+                animate={isInView ? "visible" : "hidden"}
+                custom={0.1}
+                className="mb-4 text-xs tracking-[0.3em] uppercase"
                 style={{
                   color: "var(--color-coffee-accent)",
-                  fontStyle: "italic",
-                }}
-              >
-                the perfect cup.
-              </em>
-            </motion.h2>
-
-            <motion.p
-              variants={fadeUp}
-              initial="hidden"
-              animate={isInView ? "visible" : "hidden"}
-              custom={0.32}
-              className="mb-8 leading-relaxed max-w-md"
-              style={{
-                fontFamily: "var(--font-body)",
-                fontSize: "1rem",
-                color: "var(--color-cream-muted)",
-                fontWeight: 300,
-                lineHeight: "1.8",
-              }}
-            >
-              Every element matters — the grind size, the water temperature, the
-              pour angle. We obsess over the details so each cup is a small,
-              perfect moment.
-            </motion.p>
-
-            {/* Stats row */}
-            <motion.div
-              variants={fadeUp}
-              initial="hidden"
-              animate={isInView ? "visible" : "hidden"}
-              custom={0.44}
-              className="flex gap-10 mb-10"
-            >
-              {[
-                { value: "93°C", label: "Brew temp" },
-                { value: "18g", label: "Dose weight" },
-                { value: "28s", label: "Extraction" },
-              ].map(({ value, label }) => (
-                <div key={label} className="flex flex-col">
-                  <span
-                    style={{
-                      fontFamily: "var(--font-display)",
-                      fontSize: "1.9rem",
-                      color: "var(--color-coffee-accent)",
-                      fontWeight: 700,
-                      lineHeight: 1,
-                    }}
-                  >
-                    {value}
-                  </span>
-                  <span
-                    style={{
-                      fontFamily: "var(--font-body)",
-                      fontSize: "0.75rem",
-                      color: "var(--color-cream-muted)",
-                      fontWeight: 300,
-                      letterSpacing: "0.08em",
-                      textTransform: "uppercase",
-                      marginTop: "6px",
-                    }}
-                  >
-                    {label}
-                  </span>
-                </div>
-              ))}
-            </motion.div>
-
-            {/* CTA */}
-            <motion.div
-              variants={fadeUp}
-              initial="hidden"
-              animate={isInView ? "visible" : "hidden"}
-              custom={0.56}
-            >
-              <motion.button
-                whileHover={{ scale: 1.04 }}
-                whileTap={{ scale: 0.97 }}
-                transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                className="rounded-full text-sm font-medium tracking-wide border cursor-pointer"
-                style={{
-                  borderColor: "rgba(245,234,216,0.2)",
-                  color: "var(--color-cream)",
                   fontFamily: "var(--font-body)",
-                  letterSpacing: "0.05em",
-                  background: "transparent",
-                  paddingLeft: "1.25rem",
-                  paddingRight: "1.25rem",
-                  paddingTop: "0.5rem",
-                  paddingBottom: "0.5rem",
-                  
                 }}
               >
-                Learn our process →
-              </motion.button>
-            </motion.div>
+                Featured
+              </motion.p>
+
+              <motion.h2
+                variants={fadeUp}
+                initial="hidden"
+                animate={isInView ? "visible" : "hidden"}
+                custom={0.2}
+                className="mb-6 leading-tight"
+                style={{
+                  fontFamily: "var(--font-display)",
+                  fontSize: "clamp(2.2rem, 5vw, 3.8rem)",
+                  color: "var(--color-cream-light)",
+                  fontWeight: 700,
+                }}
+              >
+                The art of{" "}
+                <em
+                  style={{
+                    color: "var(--color-coffee-accent)",
+                    fontStyle: "italic",
+                  }}
+                >
+                  the perfect cup.
+                </em>
+              </motion.h2>
+
+              <motion.p
+                variants={fadeUp}
+                initial="hidden"
+                animate={isInView ? "visible" : "hidden"}
+                custom={0.32}
+                className="mb-8 leading-relaxed max-w-md"
+                style={{
+                  fontFamily: "var(--font-body)",
+                  fontSize: "1rem",
+                  color: "var(--color-cream-muted)",
+                  fontWeight: 300,
+                  lineHeight: "1.8",
+                }}
+              >
+                Every element matters — the grind size, the water temperature,
+                the pour angle. We obsess over the details so each cup is a
+                small, perfect moment.
+              </motion.p>
+
+              {/* Stats row */}
+              <motion.div
+                variants={fadeUp}
+                initial="hidden"
+                animate={isInView ? "visible" : "hidden"}
+                custom={0.44}
+                className="flex gap-10 mb-10"
+              >
+                {[
+                  { value: "93°C", label: "Brew temp" },
+                  { value: "18g", label: "Dose weight" },
+                  { value: "28s", label: "Extraction" },
+                ].map(({ value, label }) => (
+                  <div key={label} className="flex flex-col">
+                    <span
+                      style={{
+                        fontFamily: "var(--font-display)",
+                        fontSize: "1.9rem",
+                        color: "var(--color-coffee-accent)",
+                        fontWeight: 700,
+                        lineHeight: 1,
+                      }}
+                    >
+                      {value}
+                    </span>
+                    <span
+                      style={{
+                        fontFamily: "var(--font-body)",
+                        fontSize: "0.75rem",
+                        color: "var(--color-cream-muted)",
+                        fontWeight: 300,
+                        letterSpacing: "0.08em",
+                        textTransform: "uppercase",
+                        marginTop: "6px",
+                      }}
+                    >
+                      {label}
+                    </span>
+                  </div>
+                ))}
+              </motion.div>
+
+              {/* CTA */}
+              <motion.div
+                variants={fadeUp}
+                initial="hidden"
+                animate={isInView ? "visible" : "hidden"}
+                custom={0.56}
+              >
+                <motion.button
+                  whileHover={{ scale: 1.04 }}
+                  whileTap={{ scale: 0.97 }}
+                  transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                  className="rounded-full text-sm font-medium tracking-wide border cursor-pointer"
+                  style={{
+                    borderColor: "rgba(245,234,216,0.2)",
+                    color: "var(--color-cream)",
+                    fontFamily: "var(--font-body)",
+                    letterSpacing: "0.05em",
+                    background: "transparent",
+                    paddingLeft: "1.25rem",
+                    paddingRight: "1.25rem",
+                    paddingTop: "0.5rem",
+                    paddingBottom: "0.5rem",
+                  }}
+                >
+                  Learn our process →
+                </motion.button>
+              </motion.div>
             </div>
           </RevealSection>
 
@@ -201,34 +205,34 @@ export default function FeaturedSection() {
               className="order-1 lg:order-2 relative flex items-center justify-center"
               style={{ height: "clamp(380px, 55vw, 580px)" }}
             >
-            {/* Glow ring behind the 3D object */}
-            <div
-              className="absolute inset-0 rounded-full pointer-events-none"
-              style={{
-                background:
-                  "radial-gradient(circle at 50% 55%, rgba(193,127,69,0.18) 0%, transparent 65%)",
-                filter: "blur(32px)",
-              }}
-            />
+              {/* Glow ring behind the 3D object */}
+              <div
+                className="absolute inset-0 rounded-full pointer-events-none"
+                style={{
+                  background:
+                    "radial-gradient(circle at 50% 55%, rgba(193,127,69,0.18) 0%, transparent 65%)",
+                  filter: "blur(32px)",
+                }}
+              />
 
-            {/* Hint label */}
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={isInView ? { opacity: 1 } : {}}
-              transition={{ delay: 1.4, duration: 0.8 }}
-              className="absolute bottom-4 left-1/2 -translate-x-1/2 text-xs tracking-widest uppercase pointer-events-none"
-              style={{
-                color: "var(--color-cream-muted)",
-                fontFamily: "var(--font-body)",
-                opacity: 0.4,
-              }}
-            >
-              Drag to rotate
-            </motion.p>
+              {/* Hint label */}
+              <motion.p
+                initial={{ opacity: 0 }}
+                animate={isInView ? { opacity: 1 } : {}}
+                transition={{ delay: 1.4, duration: 0.8 }}
+                className="absolute bottom-4 left-1/2 -translate-x-1/2 text-xs tracking-widest uppercase pointer-events-none"
+                style={{
+                  color: "var(--color-cream-muted)",
+                  fontFamily: "var(--font-body)",
+                  opacity: 0.4,
+                }}
+              >
+                Drag to rotate
+              </motion.p>
 
-            <Suspense fallback={<CanvasFallback />}>
-              <CoffeeCup3D />
-            </Suspense>
+              <Suspense fallback={<CanvasFallback />}>
+                <CoffeeCup3D />
+              </Suspense>
             </motion.div>
           </RevealSection>
         </div>

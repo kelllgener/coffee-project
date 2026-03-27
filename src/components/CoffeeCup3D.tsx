@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useMemo } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import * as THREE from "three";
@@ -60,16 +60,12 @@ function CoffeeSurface() {
   return (
     <mesh ref={ref} position={[0, 0.71, 0]} rotation={[-Math.PI / 2, 0, 0]}>
       <circleGeometry args={[0.555, 64]} />
-      <meshStandardMaterial
-        color="#1c0f06"
-        roughness={0.25}
-        metalness={0.05}
-      />
+      <meshStandardMaterial color="#1c0f06" roughness={0.25} metalness={0.05} />
     </mesh>
   );
 }
 
-// ── Crema ring on coffee surface ──────────────────────────────────────────
+// ── Crema ring ────────────────────────────────────────────────────────────
 function CremaRing() {
   return (
     <mesh position={[0, 0.715, 0]} rotation={[-Math.PI / 2, 0, 0]}>
@@ -80,6 +76,99 @@ function CremaRing() {
         metalness={0}
         transparent
         opacity={0.85}
+      />
+    </mesh>
+  );
+}
+
+// ── Logo label painted onto a canvas texture ──────────────────────────────
+function CupLabel() {
+  const texture = useMemo(() => {
+    const size = 512;
+    const canvas = document.createElement("canvas");
+    canvas.width = size;
+    canvas.height = size;
+    const ctx = canvas.getContext("2d")!;
+
+    // Transparent base
+    ctx.clearRect(0, 0, size, size);
+
+    const cx = size / 2;
+    const cy = size / 2 + 20;
+
+    // ── Decorative top rule ──
+    ctx.strokeStyle = "rgba(201, 135, 58, 0.7)";
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(cx - 90, cy - 72);
+    ctx.lineTo(cx + 90, cy - 72);
+    ctx.stroke();
+
+    // ── Small diamond / ornament ──
+    ctx.fillStyle = "rgba(201, 135, 58, 0.85)";
+    ctx.save();
+    ctx.translate(cx, cy - 72);
+    ctx.rotate(Math.PI / 4);
+    ctx.fillRect(-4, -4, 8, 8);
+    ctx.restore();
+
+    // ── "NOIR" wordmark ──
+    ctx.fillStyle = "rgba(240, 220, 190, 0.92)";
+    ctx.font = "bold 72px Georgia, serif";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText("NOIR", cx, cy - 22);
+
+    // ── Thin rule between words ──
+    ctx.strokeStyle = "rgba(201, 135, 58, 0.55)";
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(cx - 60, cy + 18);
+    ctx.lineTo(cx + 60, cy + 18);
+    ctx.stroke();
+
+    // ── "& BREW" in smaller spaced caps ──
+    ctx.fillStyle = "rgba(201, 135, 58, 0.9)";
+    ctx.font = "500 28px Georgia, serif";
+    ctx.letterSpacing = "0.22em";
+    ctx.fillText("& BREW", cx + 14, cy + 44);
+
+    // ── Decorative bottom rule ──
+    ctx.strokeStyle = "rgba(201, 135, 58, 0.7)";
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(cx - 90, cy + 76);
+    ctx.lineTo(cx + 90, cy + 76);
+    ctx.stroke();
+
+    // ── Small diamond bottom ──
+    ctx.fillStyle = "rgba(201, 135, 58, 0.85)";
+    ctx.save();
+    ctx.translate(cx, cy + 76);
+    ctx.rotate(Math.PI / 4);
+    ctx.fillRect(-4, -4, 8, 8);
+    ctx.restore();
+
+    const tex = new THREE.CanvasTexture(canvas);
+    tex.needsUpdate = true;
+    return tex;
+  }, []);
+
+  // Wrap the label around the front face of the cup
+  // Position it slightly proud of the cup surface to avoid z-fighting
+  return (
+    <mesh position={[0, 0.08, 0.615]} rotation={[0, 0, 0]}>
+      <planeGeometry args={[0.82, 0.72]} />
+      <meshStandardMaterial
+        map={texture}
+        transparent
+        opacity={1}
+        roughness={0.45}
+        metalness={0.05}
+        depthWrite={false}
+        polygonOffset
+        polygonOffsetFactor={-1}
+        polygonOffsetUnits={-1}
       />
     </mesh>
   );
@@ -104,18 +193,17 @@ function CupBody({ hovered }: { hovered: boolean }) {
     );
   });
 
-  // ── Ceramic: warm off-white/latte color, matte with subtle sheen
-  const ceramicColor   = "#c8a882";   // warm latte ceramic
-  const ceramicInside  = "#b8956e";   // slightly darker inside
-  const accentGold     = "#c9873a";   // gold rim/accents
-  const saucerColor    = "#c2a07a";   // saucer — slightly lighter
-  const baseColor      = "#a07850";   // base underside — darker
+  const ceramicColor  = "#c8a882";
+  const ceramicInside = "#b8956e";
+  const accentGold    = "#c9873a";
+  const saucerColor   = "#c2a07a";
+  const baseColor     = "#a07850";
 
   return (
     <group ref={groupRef}>
 
-      {/* ── Outer cup body (tapered cylinder, open top) */}
-      <mesh castShadow receiveShadow>
+      {/* Outer cup body — castShadow only, NO receiveShadow to kill self-shadow artifact */}
+      <mesh castShadow>
         <cylinderGeometry args={[0.60, 0.46, 1.48, 80, 2, true]} />
         <meshStandardMaterial
           color={ceramicColor}
@@ -125,8 +213,8 @@ function CupBody({ hovered }: { hovered: boolean }) {
         />
       </mesh>
 
-      {/* ── Inner cup wall */}
-      <mesh position={[0, 0.0, 0]}>
+      {/* Inner cup wall */}
+      <mesh>
         <cylinderGeometry args={[0.56, 0.43, 1.44, 80, 1, true]} />
         <meshStandardMaterial
           color={ceramicInside}
@@ -136,43 +224,31 @@ function CupBody({ hovered }: { hovered: boolean }) {
         />
       </mesh>
 
-      {/* ── Cup base disk */}
-      <mesh position={[0, -0.74, 0]} castShadow receiveShadow>
+      {/* Cup base — castShadow only */}
+      <mesh position={[0, -0.74, 0]} castShadow>
         <cylinderGeometry args={[0.46, 0.44, 0.05, 64]} />
         <meshStandardMaterial color={baseColor} roughness={0.65} metalness={0} />
       </mesh>
 
-      {/* ── Rim — gold accent torus */}
+      {/* Rim gold torus */}
       <mesh position={[0, 0.745, 0]}>
         <torusGeometry args={[0.60, 0.026, 20, 80]} />
-        <meshStandardMaterial
-          color={accentGold}
-          roughness={0.18}
-          metalness={0.55}
-        />
+        <meshStandardMaterial color={accentGold} roughness={0.18} metalness={0.55} />
       </mesh>
 
-      {/* ── Rim top face (thin disk caps the open top) */}
+      {/* Rim top face */}
       <mesh position={[0, 0.748, 0]} rotation={[-Math.PI / 2, 0, 0]}>
         <ringGeometry args={[0.57, 0.62, 80]} />
-        <meshStandardMaterial
-          color={accentGold}
-          roughness={0.18}
-          metalness={0.55}
-        />
+        <meshStandardMaterial color={accentGold} roughness={0.18} metalness={0.55} />
       </mesh>
 
-      {/* ── Handle — D-shape torus arc */}
-      <mesh position={[0.80, 0.06, 0]} rotation={[0, 0, Math.PI / 2]}>
+      {/* Handle */}
+      <mesh position={[0.80, 0.06, 0]} rotation={[0, 0, Math.PI / 2]} castShadow>
         <torusGeometry args={[0.295, 0.058, 20, 60, Math.PI]} />
-        <meshStandardMaterial
-          color={ceramicColor}
-          roughness={0.55}
-          metalness={0}
-        />
+        <meshStandardMaterial color={ceramicColor} roughness={0.55} metalness={0} />
       </mesh>
 
-      {/* ── Handle gold accent lines (two thin tori) */}
+      {/* Handle gold accent lines */}
       <mesh position={[0.80, 0.27, 0]} rotation={[0, 0, Math.PI / 2]}>
         <torusGeometry args={[0.295, 0.010, 12, 60, Math.PI]} />
         <meshStandardMaterial color={accentGold} roughness={0.2} metalness={0.5} />
@@ -182,41 +258,44 @@ function CupBody({ hovered }: { hovered: boolean }) {
         <meshStandardMaterial color={accentGold} roughness={0.2} metalness={0.5} />
       </mesh>
 
-      {/* ── Saucer body */}
-      <mesh position={[0, -0.82, 0]} castShadow receiveShadow>
+      {/* Saucer — castShadow only, NO receiveShadow */}
+      <mesh position={[0, -0.82, 0]} castShadow>
         <cylinderGeometry args={[1.08, 0.98, 0.10, 80]} />
         <meshStandardMaterial color={saucerColor} roughness={0.5} metalness={0} />
       </mesh>
 
-      {/* ── Saucer top face ring */}
+      {/* Saucer top face ring */}
       <mesh position={[0, -0.77, 0]} rotation={[-Math.PI / 2, 0, 0]}>
         <ringGeometry args={[0.68, 1.08, 80]} />
         <meshStandardMaterial color={saucerColor} roughness={0.45} metalness={0} />
       </mesh>
 
-      {/* ── Saucer center well (slight indent where cup sits) */}
+      {/* Saucer center well */}
       <mesh position={[0, -0.768, 0]} rotation={[-Math.PI / 2, 0, 0]}>
         <circleGeometry args={[0.68, 64]} />
         <meshStandardMaterial color={baseColor} roughness={0.6} metalness={0} />
       </mesh>
 
-      {/* ── Saucer rim gold accent */}
+      {/* Saucer rim gold accent */}
       <mesh position={[0, -0.772, 0]}>
         <torusGeometry args={[1.03, 0.016, 14, 80]} />
         <meshStandardMaterial color={accentGold} roughness={0.18} metalness={0.55} />
       </mesh>
 
-      {/* ── Saucer inner gold ring */}
+      {/* Saucer inner gold ring */}
       <mesh position={[0, -0.768, 0]}>
         <torusGeometry args={[0.68, 0.010, 12, 64]} />
         <meshStandardMaterial color={accentGold} roughness={0.2} metalness={0.5} />
       </mesh>
 
-      {/* ── Coffee surface + crema */}
+      {/* Coffee surface + crema */}
       <CoffeeSurface />
       <CremaRing />
 
-      {/* ── Steam */}
+      {/* Logo label */}
+      <CupLabel />
+
+      {/* Steam */}
       {[0, 1, 2, 3].map((i) => (
         <SteamParticle key={i} offset={i} />
       ))}
@@ -273,22 +352,12 @@ function AmbientParticles() {
 function Lighting() {
   return (
     <>
-      {/* Soft warm fill — lifts shadows off black */}
       <ambientLight intensity={2.5} color="#8c6040" />
-
-      {/* Key light — warm from upper-left front */}
       <pointLight position={[-3, 4, 4]} intensity={55} color="#ffe0b0" />
-
-      {/* Fill light — cooler from right */}
       <pointLight position={[4, 2, 2]}  intensity={30} color="#ffd090" />
-
-      {/* Rim light — behind for edge definition */}
       <pointLight position={[0, 3, -4]} intensity={20} color="#c87030" />
-
-      {/* Under bounce — subtle warm from below */}
       <pointLight position={[0, -3, 2]} intensity={12} color="#a06030" />
-
-      {/* Top spotlight — catches rim gold */}
+      {/* castShadow only on the spotlight — no self-shadowing on the cup */}
       <spotLight
         position={[0, 6, 1]}
         intensity={80}
@@ -296,7 +365,8 @@ function Lighting() {
         angle={0.5}
         penumbra={0.85}
         castShadow
-        shadow-mapSize={[512, 512]}
+        shadow-mapSize={[1024, 1024]}
+        shadow-bias={-0.002}
       />
     </>
   );

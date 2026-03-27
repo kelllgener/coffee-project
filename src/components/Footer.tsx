@@ -24,7 +24,7 @@ export default function Footer() {
     <footer
       ref={ref}
       className="relative px-6 py-20 overflow-hidden"
-      style={{ background: 'var(--color-coffee-dark)', borderTop: '1px solid rgba(193,127,69,0.1)' }}
+      style={{ background: 'var(--color-coffee-dark)', borderTop: '1px solid rgba(193,127,69,0.1)', paddingLeft: "1.5rem", paddingRight: "1.5rem" }}
     >
       {/* Background glow */}
       <div
