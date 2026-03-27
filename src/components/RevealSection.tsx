@@ -10,7 +10,7 @@ interface RevealSectionProps {
 
 export default function RevealSection({ children, margin = '-80px', delay = 0 }: RevealSectionProps) {
   const ref = useRef<HTMLDivElement>(null)
-  const isInView = useInView(ref, { margin })
+  const isInView = useInView(ref, { margin: margin as any })
 
   return (
     <motion.div

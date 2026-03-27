@@ -3,7 +3,7 @@ import { motion, useInView } from "framer-motion";
 import { fadeUp, fadeIn } from "../lib/utils";
 
 // Lazy import so Three.js doesn't block initial paint
-import CoffeeCup3D from "./CoffeeCup3d";
+import CoffeeCup3D from "./CoffeeCup3D";
 
 function CanvasFallback() {
   return (

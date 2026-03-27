@@ -73,6 +73,6 @@ export const scaleIn: Variants = {
 // ── useReveal hook (for scroll-triggered animations) ───────────────────────
 export function useReveal(margin: string = '-80px') {
   const ref = useRef<HTMLElement>(null)
-  const isInView = useInView(ref, { once: true, margin })
+  const isInView = useInView(ref, { once: true, margin: margin as any })
   return { ref, isInView }
 }
