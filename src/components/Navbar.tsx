@@ -7,14 +7,16 @@ export default function Navbar() {
   const bgOpacity = useTransform(scrollY, [0, 80], [0, 1]);
   const borderOpacity = useTransform(scrollY, [0, 80], [0, 1]);
 
-  const links = ["Menu", "Our Story", "Collection", "Featured"];
+  const links = ["Home", "Collection", "Featured"];
 
   const getLinkHref = (link: string) => {
     switch (link) {
+      case "Home":
+        return "#home";
       case "Collection":
-        return "#coffee-grid";
+        return "#collection";
       case "Featured":
-        return "#featured-section";
+        return "#featured";
       default:
         return "#";
     }

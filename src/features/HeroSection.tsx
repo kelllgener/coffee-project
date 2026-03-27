@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
 import { fadeUp, fadeIn, scaleIn } from '../lib/utils'
-import RevealSection from './RevealSection'
+import RevealSection from '../components/RevealSection'
 
 export default function HeroSection() {
   return (

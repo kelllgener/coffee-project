@@ -1,10 +1,10 @@
 import { Suspense, useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import { fadeUp, fadeIn } from "../lib/utils";
-import RevealSection from "./RevealSection";
+import RevealSection from "../components/RevealSection";
 
 // Lazy import so Three.js doesn't block initial paint
-import CoffeeCup3D from "./CoffeeCup3D";
+import CoffeeCup3D from "../components/CoffeeCup3D";
 
 function CanvasFallback() {
   return (
@@ -28,7 +28,6 @@ export default function FeaturedSection() {
 
   return (
     <section
-      id="featured"
       ref={sectionRef}
       className="relative min-h-screen flex items-center overflow-hidden px-6 py-24"
       style={{

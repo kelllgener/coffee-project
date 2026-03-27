@@ -17,7 +17,7 @@ function SteamParticle({ offset }: { offset: number }) {
   const ref = useRef<THREE.Mesh>(null);
   const elapsed = useRef(offset * 2.5);
   const speed = 0.38 + offset * 0.18;
-  const sway = 0.25 + offset * 0.12;
+  const sway  = 0.25 + offset * 0.12;
 
   useFrame((_, delta) => {
     if (!ref.current) return;
@@ -54,13 +54,13 @@ function CoffeeSurface() {
     if (!ref.current) return;
     elapsed.current += delta;
     (ref.current.material as THREE.MeshStandardMaterial).roughness =
-      0.25 + Math.sin(elapsed.current * 0.9) * 0.06;
+      0.22 + Math.sin(elapsed.current * 0.9) * 0.06;
   });
 
   return (
     <mesh ref={ref} position={[0, 0.71, 0]} rotation={[-Math.PI / 2, 0, 0]}>
       <circleGeometry args={[0.555, 64]} />
-      <meshStandardMaterial color="#1c0f06" roughness={0.25} metalness={0.05} />
+      <meshStandardMaterial color="#1a0a04" roughness={0.22} metalness={0.05} />
     </mesh>
   );
 }
@@ -69,9 +69,9 @@ function CoffeeSurface() {
 function CremaRing() {
   return (
     <mesh position={[0, 0.715, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-      <ringGeometry args={[0.38, 0.555, 64]} />
+      <ringGeometry args={[0.35, 0.555, 64]} />
       <meshStandardMaterial
-        color="#6b3d1e"
+        color="#7a4822"
         roughness={0.5}
         metalness={0}
         transparent
@@ -81,30 +81,90 @@ function CremaRing() {
   );
 }
 
+// ── Latte art heart (canvas texture) ─────────────────────────────────────
+function LatteArt() {
+  const texture = useMemo(() => {
+    const size = 256;
+    const cv   = document.createElement("canvas");
+    cv.width   = size;
+    cv.height  = size;
+    const ctx  = cv.getContext("2d")!;
+    ctx.clearRect(0, 0, size, size);
+
+    const cx = 128, cy = 132;
+
+    // Heart fill
+    ctx.beginPath();
+    ctx.moveTo(cx, cy + 42);
+    ctx.bezierCurveTo(cx - 62, cy + 12, cx - 82, cy - 28, cx - 42, cy - 50);
+    ctx.bezierCurveTo(cx - 12, cy - 66, cx,      cy - 46, cx,      cy - 36);
+    ctx.bezierCurveTo(cx,      cy - 46, cx + 12, cy - 66, cx + 42, cy - 50);
+    ctx.bezierCurveTo(cx + 82, cy - 28, cx + 62, cy + 12, cx,      cy + 42);
+    ctx.closePath();
+    ctx.fillStyle = "rgba(245, 235, 210, 0.93)";
+    ctx.fill();
+
+    // Inner rosette swirl lines
+    ctx.strokeStyle = "rgba(255, 248, 230, 0.45)";
+    ctx.lineWidth   = 1.8;
+    for (let i = 0; i < 3; i++) {
+      const off = (i - 1) * 7;
+      ctx.beginPath();
+      ctx.moveTo(cx + off, cy - 32 + off * 0.5);
+      ctx.quadraticCurveTo(cx - 18 + off, cy + off, cx + off, cy + 30 + off * 0.5);
+      ctx.stroke();
+    }
+
+    // Top teardrop accent
+    ctx.beginPath();
+    ctx.arc(cx, cy - 54, 7, 0, Math.PI * 2);
+    ctx.fillStyle = "rgba(245, 235, 210, 0.72)";
+    ctx.fill();
+
+    const tex       = new THREE.CanvasTexture(cv);
+    tex.needsUpdate = true;
+    return tex;
+  }, []);
+
+  return (
+    <mesh position={[0, 0.716, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+      <circleGeometry args={[0.50, 64]} />
+      <meshStandardMaterial
+        map={texture}
+        transparent
+        opacity={0.98}
+        roughness={0.4}
+        depthWrite={false}
+        polygonOffset
+        polygonOffsetFactor={-2}
+        polygonOffsetUnits={-2}
+      />
+    </mesh>
+  );
+}
+
 // ── Logo label painted onto a canvas texture ──────────────────────────────
 function CupLabel() {
   const texture = useMemo(() => {
-    const size = 512;
+    const size   = 512;
     const canvas = document.createElement("canvas");
-    canvas.width = size;
+    canvas.width  = size;
     canvas.height = size;
-    const ctx = canvas.getContext("2d")!;
-
-    // Transparent base
+    const ctx     = canvas.getContext("2d")!;
     ctx.clearRect(0, 0, size, size);
 
     const cx = size / 2;
     const cy = size / 2 + 20;
 
-    // ── Decorative top rule ──
+    // Decorative top rule
     ctx.strokeStyle = "rgba(201, 135, 58, 0.7)";
-    ctx.lineWidth = 1.5;
+    ctx.lineWidth   = 1.5;
     ctx.beginPath();
     ctx.moveTo(cx - 90, cy - 72);
     ctx.lineTo(cx + 90, cy - 72);
     ctx.stroke();
 
-    // ── Small diamond / ornament ──
+    // Small diamond ornament top
     ctx.fillStyle = "rgba(201, 135, 58, 0.85)";
     ctx.save();
     ctx.translate(cx, cy - 72);
@@ -112,36 +172,36 @@ function CupLabel() {
     ctx.fillRect(-4, -4, 8, 8);
     ctx.restore();
 
-    // ── "NOIR" wordmark ──
-    ctx.fillStyle = "rgba(240, 220, 190, 0.92)";
-    ctx.font = "bold 72px Georgia, serif";
-    ctx.textAlign = "center";
+    // "NOIR" wordmark
+    ctx.fillStyle    = "rgba(240, 220, 190, 0.92)";
+    ctx.font         = "bold 72px Georgia, serif";
+    ctx.textAlign    = "center";
     ctx.textBaseline = "middle";
     ctx.fillText("NOIR", cx, cy - 22);
 
-    // ── Thin rule between words ──
+    // Thin rule between words
     ctx.strokeStyle = "rgba(201, 135, 58, 0.55)";
-    ctx.lineWidth = 1;
+    ctx.lineWidth   = 1;
     ctx.beginPath();
     ctx.moveTo(cx - 60, cy + 18);
     ctx.lineTo(cx + 60, cy + 18);
     ctx.stroke();
 
-    // ── "& BREW" in smaller spaced caps ──
-    ctx.fillStyle = "rgba(201, 135, 58, 0.9)";
-    ctx.font = "500 28px Georgia, serif";
-    ctx.letterSpacing = "0.22em";
+    // "& BREW" smaller spaced caps
+    ctx.fillStyle    = "rgba(201, 135, 58, 0.9)";
+    ctx.font         = "500 28px Georgia, serif";
+    (ctx as any).letterSpacing = "0.22em";
     ctx.fillText("& BREW", cx + 14, cy + 44);
 
-    // ── Decorative bottom rule ──
+    // Decorative bottom rule
     ctx.strokeStyle = "rgba(201, 135, 58, 0.7)";
-    ctx.lineWidth = 1.5;
+    ctx.lineWidth   = 1.5;
     ctx.beginPath();
     ctx.moveTo(cx - 90, cy + 76);
     ctx.lineTo(cx + 90, cy + 76);
     ctx.stroke();
 
-    // ── Small diamond bottom ──
+    // Small diamond ornament bottom
     ctx.fillStyle = "rgba(201, 135, 58, 0.85)";
     ctx.save();
     ctx.translate(cx, cy + 76);
@@ -149,15 +209,13 @@ function CupLabel() {
     ctx.fillRect(-4, -4, 8, 8);
     ctx.restore();
 
-    const tex = new THREE.CanvasTexture(canvas);
+    const tex       = new THREE.CanvasTexture(canvas);
     tex.needsUpdate = true;
     return tex;
   }, []);
 
-  // Wrap the label around the front face of the cup
-  // Position it slightly proud of the cup surface to avoid z-fighting
   return (
-    <mesh position={[0, 0.08, 0.615]} rotation={[0, 0, 0]}>
+    <mesh position={[0, 0.08, 0.625]} rotation={[0, 0, 0]}>
       <planeGeometry args={[0.82, 0.72]} />
       <meshStandardMaterial
         map={texture}
@@ -174,10 +232,79 @@ function CupLabel() {
   );
 }
 
-// ── Cup body ──────────────────────────────────────────────────────────────
+// ── Ribbed cup body via LatheGeometry ─────────────────────────────────────
+function RibbedCupBody() {
+  const latheGeo = useMemo(() => {
+    const pts: THREE.Vector2[] = [];
+    const segs = 48;
+    for (let i = 0; i <= segs; i++) {
+      const t     = i / segs;
+      const y     = -0.74 + t * 1.48;
+      const baseR = 0.46 + t * 0.14;
+      const rib   = Math.sin(t * Math.PI * 14) * 0.018 * Math.sin(t * Math.PI);
+      pts.push(new THREE.Vector2(baseR + rib, y));
+    }
+    return new THREE.LatheGeometry(pts, 80);
+  }, []);
+
+  const innerGeo = useMemo(() => {
+    const pts: THREE.Vector2[] = [];
+    const segs = 48;
+    for (let i = 0; i <= segs; i++) {
+      const t = i / segs;
+      pts.push(new THREE.Vector2(0.41 + t * 0.12, -0.70 + t * 1.40));
+    }
+    return new THREE.LatheGeometry(pts, 64);
+  }, []);
+
+  return (
+    <>
+      {/* Ribbed outer shell */}
+      <mesh geometry={latheGeo} castShadow>
+        <meshStandardMaterial color="#d4c09a" roughness={0.6} metalness={0.0} />
+      </mesh>
+      {/* Inner wall (back-side) */}
+      <mesh geometry={innerGeo}>
+        <meshStandardMaterial
+          color="#b09070"
+          roughness={0.65}
+          metalness={0}
+          side={THREE.BackSide}
+        />
+      </mesh>
+    </>
+  );
+}
+
+// ── C-shaped handle via TubeGeometry ─────────────────────────────────────
+function CupHandle() {
+  const geo = useMemo(() => {
+    const curve = new THREE.CatmullRomCurve3([
+      new THREE.Vector3(0.60,  0.28, 0),
+      new THREE.Vector3(1.05,  0.28, 0),
+      new THREE.Vector3(1.12,  0.10, 0),
+      new THREE.Vector3(1.12, -0.08, 0),
+      new THREE.Vector3(1.05, -0.18, 0),
+      new THREE.Vector3(0.60, -0.18, 0),
+    ]);
+    return new THREE.TubeGeometry(curve, 30, 0.055, 12, false);
+  }, []);
+
+  return (
+    <mesh geometry={geo} castShadow>
+      <meshStandardMaterial color="#d4c09a" roughness={0.55} metalness={0} />
+    </mesh>
+  );
+}
+
+// ── Cup body (groups everything) ──────────────────────────────────────────
 function CupBody({ hovered }: { hovered: boolean }) {
   const groupRef = useRef<THREE.Group>(null);
   const { mouse } = useThree();
+
+  const accentGold  = "#c9873a";
+  const saucerColor = "#cbb890";
+  const baseColor   = "#9a7850";
 
   useFrame((_, delta) => {
     if (!groupRef.current) return;
@@ -193,109 +320,72 @@ function CupBody({ hovered }: { hovered: boolean }) {
     );
   });
 
-  const ceramicColor  = "#c8a882";
-  const ceramicInside = "#b8956e";
-  const accentGold    = "#c9873a";
-  const saucerColor   = "#c2a07a";
-  const baseColor     = "#a07850";
-
   return (
     <group ref={groupRef}>
 
-      {/* Outer cup body — castShadow only, NO receiveShadow to kill self-shadow artifact */}
-      <mesh castShadow>
-        <cylinderGeometry args={[0.60, 0.46, 1.48, 80, 2, true]} />
-        <meshStandardMaterial
-          color={ceramicColor}
-          roughness={0.55}
-          metalness={0.0}
-          side={THREE.FrontSide}
-        />
-      </mesh>
+      {/* ── Ribbed cup shell + inner wall ── */}
+      <RibbedCupBody />
 
-      {/* Inner cup wall */}
-      <mesh>
-        <cylinderGeometry args={[0.56, 0.43, 1.44, 80, 1, true]} />
-        <meshStandardMaterial
-          color={ceramicInside}
-          roughness={0.6}
-          metalness={0}
-          side={THREE.BackSide}
-        />
-      </mesh>
-
-      {/* Cup base — castShadow only */}
+      {/* Cup base disk */}
       <mesh position={[0, -0.74, 0]} castShadow>
         <cylinderGeometry args={[0.46, 0.44, 0.05, 64]} />
         <meshStandardMaterial color={baseColor} roughness={0.65} metalness={0} />
       </mesh>
 
-      {/* Rim gold torus */}
+      {/* Gold rim torus */}
       <mesh position={[0, 0.745, 0]}>
-        <torusGeometry args={[0.60, 0.026, 20, 80]} />
+        <torusGeometry args={[0.605, 0.022, 20, 80]} />
         <meshStandardMaterial color={accentGold} roughness={0.18} metalness={0.55} />
       </mesh>
 
       {/* Rim top face */}
       <mesh position={[0, 0.748, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-        <ringGeometry args={[0.57, 0.62, 80]} />
+        <ringGeometry args={[0.58, 0.625, 80]} />
         <meshStandardMaterial color={accentGold} roughness={0.18} metalness={0.55} />
       </mesh>
 
-      {/* Handle */}
-      <mesh position={[0.80, 0.06, 0]} rotation={[0, 0, Math.PI / 2]} castShadow>
-        <torusGeometry args={[0.295, 0.058, 20, 60, Math.PI]} />
-        <meshStandardMaterial color={ceramicColor} roughness={0.55} metalness={0} />
-      </mesh>
+      {/* ── C-shaped handle ── */}
+      <CupHandle />
 
-      {/* Handle gold accent lines */}
-      <mesh position={[0.80, 0.27, 0]} rotation={[0, 0, Math.PI / 2]}>
-        <torusGeometry args={[0.295, 0.010, 12, 60, Math.PI]} />
-        <meshStandardMaterial color={accentGold} roughness={0.2} metalness={0.5} />
-      </mesh>
-      <mesh position={[0.80, -0.16, 0]} rotation={[0, 0, Math.PI / 2]}>
-        <torusGeometry args={[0.295, 0.010, 12, 60, Math.PI]} />
-        <meshStandardMaterial color={accentGold} roughness={0.2} metalness={0.5} />
-      </mesh>
-
-      {/* Saucer — castShadow only, NO receiveShadow */}
+      {/* ── Saucer ── */}
       <mesh position={[0, -0.82, 0]} castShadow>
-        <cylinderGeometry args={[1.08, 0.98, 0.10, 80]} />
+        <cylinderGeometry args={[1.10, 1.00, 0.10, 80]} />
         <meshStandardMaterial color={saucerColor} roughness={0.5} metalness={0} />
       </mesh>
 
       {/* Saucer top face ring */}
-      <mesh position={[0, -0.77, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-        <ringGeometry args={[0.68, 1.08, 80]} />
+      <mesh position={[0, -0.768, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+        <ringGeometry args={[0.70, 1.10, 80]} />
         <meshStandardMaterial color={saucerColor} roughness={0.45} metalness={0} />
       </mesh>
 
       {/* Saucer center well */}
-      <mesh position={[0, -0.768, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-        <circleGeometry args={[0.68, 64]} />
+      <mesh position={[0, -0.767, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+        <circleGeometry args={[0.70, 64]} />
         <meshStandardMaterial color={baseColor} roughness={0.6} metalness={0} />
       </mesh>
 
       {/* Saucer rim gold accent */}
       <mesh position={[0, -0.772, 0]}>
-        <torusGeometry args={[1.03, 0.016, 14, 80]} />
+        <torusGeometry args={[1.05, 0.014, 14, 80]} />
         <meshStandardMaterial color={accentGold} roughness={0.18} metalness={0.55} />
       </mesh>
 
       {/* Saucer inner gold ring */}
       <mesh position={[0, -0.768, 0]}>
-        <torusGeometry args={[0.68, 0.010, 12, 64]} />
+        <torusGeometry args={[0.70, 0.010, 12, 64]} />
         <meshStandardMaterial color={accentGold} roughness={0.2} metalness={0.5} />
       </mesh>
 
-      {/* Coffee surface + crema */}
+      {/* ── Coffee surface + crema + latte art ── */}
       <CoffeeSurface />
       <CremaRing />
+      <LatteArt />
 
-      {/* Logo label */}
+      {/* ── Logo label ── */}
       <CupLabel />
 
-      {/* Steam */}
+      {/* ── Steam ── */}
       {[0, 1, 2, 3].map((i) => (
         <SteamParticle key={i} offset={i} />
       ))}
@@ -305,9 +395,9 @@ function CupBody({ hovered }: { hovered: boolean }) {
 
 // ── Ambient dust particles ────────────────────────────────────────────────
 function AmbientParticles() {
-  const ref = useRef<THREE.Points>(null);
+  const ref     = useRef<THREE.Points>(null);
   const elapsed = useRef(0);
-  const count = 100;
+  const count   = 100;
 
   const positions = useRef(
     (() => {
@@ -353,11 +443,10 @@ function Lighting() {
   return (
     <>
       <ambientLight intensity={2.5} color="#8c6040" />
-      <pointLight position={[-3, 4, 4]} intensity={55} color="#ffe0b0" />
-      <pointLight position={[4, 2, 2]}  intensity={30} color="#ffd090" />
-      <pointLight position={[0, 3, -4]} intensity={20} color="#c87030" />
-      <pointLight position={[0, -3, 2]} intensity={12} color="#a06030" />
-      {/* castShadow only on the spotlight — no self-shadowing on the cup */}
+      <pointLight position={[-3, 4,  4]} intensity={55} color="#ffe0b0" />
+      <pointLight position={[ 4, 2,  2]} intensity={30} color="#ffd090" />
+      <pointLight position={[ 0, 3, -4]} intensity={20} color="#c87030" />
+      <pointLight position={[ 0,-3,  2]} intensity={12} color="#a06030" />
       <spotLight
         position={[0, 6, 1]}
         intensity={80}

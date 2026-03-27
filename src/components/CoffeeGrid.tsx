@@ -2,7 +2,7 @@ import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import { staggerContainer } from "../lib/utils";
 import { coffeeList } from "../data/coffeeData";
-import CoffeeCard from "./CoffeeCard";
+import CoffeeCard from "../features/CoffeeCard";
 
 export default function CoffeeGrid() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -13,7 +13,6 @@ export default function CoffeeGrid() {
 
   return (
     <section
-      id="collection"
       ref={sectionRef}
       className="relative px-6 py-28"
       style={{ background: "var(--color-coffee-black)" }}
