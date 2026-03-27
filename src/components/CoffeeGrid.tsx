@@ -8,8 +8,8 @@ export default function CoffeeGrid() {
   const sectionRef = useRef<HTMLElement>(null)
   const headingRef = useRef<HTMLDivElement>(null)
 
-  const isHeadingInView = useInView(headingRef, { once: true, margin: '-80px' })
-  const isGridInView = useInView(sectionRef, { once: true, margin: '-60px' })
+  const isHeadingInView = useInView(headingRef, { margin: '-80px' })
+  const isGridInView = useInView(sectionRef, { margin: '-60px' })
 
   return (
     <section

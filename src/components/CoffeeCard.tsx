@@ -1,18 +1,24 @@
-import { motion } from 'framer-motion'
+import { motion, useInView } from 'framer-motion'
 import { cardEntrance } from '../lib/utils'
 import type { Coffee } from '../data/coffeeData'
+import { useRef } from 'react'
 
 interface CoffeeCardProps {
   coffee: Coffee
 }
 
 export default function CoffeeCard({ coffee }: CoffeeCardProps) {
+  const ref = useRef<HTMLDivElement>(null)
+  const isInView = useInView(ref, { margin: '-80px' })
+
   return (
     <motion.article
+      ref={ref}
       variants={cardEntrance}
       whileHover="hover"
       initial="rest"
-      animate="rest"
+      animate={isInView ? 'rest' : 'hidden'}
+      custom={isInView}
       className="relative group flex flex-col justify-between rounded-2xl overflow-hidden cursor-default"
       style={{
         background: 'rgba(26,16,8,0.7)',

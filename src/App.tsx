@@ -30,9 +30,15 @@ export default function App() {
             <ScrollProgress />
             <Navbar />
             <main style={{ background: 'var(--color-coffee-black)' }}>
-              <HeroSection />
-              <CoffeeGrid />
-              <FeaturedSection />
+              <RevealSection>
+                <HeroSection />
+              </RevealSection>
+              <RevealSection margin="-60px">
+                <CoffeeGrid />
+              </RevealSection>
+              <RevealSection margin="-100px">
+                <FeaturedSection />
+              </RevealSection>
             </main>
             <RevealSection margin="-100px">
               <Footer />
