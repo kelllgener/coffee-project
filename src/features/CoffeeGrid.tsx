@@ -2,7 +2,8 @@ import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import { staggerContainer } from "../lib/utils";
 import { coffeeList } from "../data/coffeeData";
-import CoffeeCard from "../features/CoffeeCard";
+import CoffeeCard from "../components/CoffeeCard";
+
 
 export default function CoffeeGrid() {
   const sectionRef = useRef<HTMLElement>(null);

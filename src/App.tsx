@@ -5,10 +5,10 @@ import LoadingScreen from "./components/LoadingScreen";
 import Navbar from "./components/Navbar";
 import ScrollProgress from "./components/ScrollProgress";
 import HeroSection from "./features/HeroSection";
-import CoffeeGrid from "./components/CoffeeGrid";
 import FeaturedSection from "./features/FeaturedSection";
 import Footer from "./components/Footer";
 import RevealSection from "./components/RevealSection";
+import CoffeeGrid from "./features/CoffeeGrid";
 
 export default function App() {
   const [loaded, setLoaded] = useState(false);

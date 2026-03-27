@@ -280,10 +280,10 @@ function CupHandle() {
   const geo = useMemo(() => {
     const curve = new THREE.CatmullRomCurve3([
       new THREE.Vector3(0.60,  0.28, 0),
-      new THREE.Vector3(1.05,  0.28, 0),
-      new THREE.Vector3(1.12,  0.10, 0),
-      new THREE.Vector3(1.12, -0.08, 0),
-      new THREE.Vector3(1.05, -0.18, 0),
+      new THREE.Vector3(0.80,  0.28, 0),
+      new THREE.Vector3(0.88,  0.10, 0),
+      new THREE.Vector3(0.88, -0.08, 0),
+      new THREE.Vector3(0.80, -0.18, 0),
       new THREE.Vector3(0.60, -0.18, 0),
     ]);
     return new THREE.TubeGeometry(curve, 30, 0.055, 12, false);
