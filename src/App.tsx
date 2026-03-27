@@ -14,7 +14,7 @@ export default function App() {
   const [loaded, setLoaded] = useState(false)
 
   return (
-    <div className="mx-4 md:mx-8">
+    <div className="mx-4 md:mx-0">
       {/* Loading screen — unmounts after animation completes */}
       <LoadingScreen onComplete={() => setLoaded(true)} />
 

@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion'
 import { fadeUp, fadeIn, scaleIn } from '../lib/utils'
+import RevealSection from './RevealSection'
 
 export default function HeroSection() {
   return (
@@ -34,7 +35,8 @@ export default function HeroSection() {
       </motion.div>
 
       {/* ── Main content ────────────────────────────────────────────────── */}
-      <div className="relative z-10 text-center max-w-4xl mx-auto">
+      <RevealSection margin="-150px" delay={0}>
+        <div className="relative z-10 text-center max-w-4xl mx-auto">
 
         {/* Badge */}
         <motion.div
@@ -163,7 +165,8 @@ export default function HeroSection() {
             Our Story
           </motion.button>
         </motion.div>
-      </div>
+        </div>
+      </RevealSection>
 
       {/* ── Scroll indicator ────────────────────────────────────────────── */}
       <motion.div
