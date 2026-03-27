@@ -1,6 +1,7 @@
 import { Suspense, useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import { fadeUp, fadeIn } from "../lib/utils";
+import RevealSection from "./RevealSection";
 
 // Lazy import so Three.js doesn't block initial paint
 import CoffeeCup3D from "./CoffeeCup3D";
@@ -58,7 +59,8 @@ export default function FeaturedSection() {
       <div className="relative z-10 w-full flex justify-center">
         <div className="max-w-7xl w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           {/* ── Left — text content ───────────────────────────────────────── */}
-          <div className="flex flex-col justify-center order-2 lg:order-1">
+          <RevealSection margin="-100px" delay={0}>
+            <div className="flex flex-col justify-center order-2 lg:order-1">
             <motion.p
               variants={fadeUp}
               initial="hidden"
@@ -186,17 +188,19 @@ export default function FeaturedSection() {
                 Learn our process →
               </motion.button>
             </motion.div>
-          </div>
+            </div>
+          </RevealSection>
 
           {/* ── Right — 3D canvas ─────────────────────────────────────────── */}
-          <motion.div
-            variants={fadeIn}
-            initial="hidden"
-            animate={isInView ? "visible" : "hidden"}
-            custom={0.3}
-            className="order-1 lg:order-2 relative flex items-center justify-center"
-            style={{ height: "clamp(380px, 55vw, 580px)" }}
-          >
+          <RevealSection margin="-100px" delay={0.2}>
+            <motion.div
+              variants={fadeIn}
+              initial="hidden"
+              animate={isInView ? "visible" : "hidden"}
+              custom={0.3}
+              className="order-1 lg:order-2 relative flex items-center justify-center"
+              style={{ height: "clamp(380px, 55vw, 580px)" }}
+            >
             {/* Glow ring behind the 3D object */}
             <div
               className="absolute inset-0 rounded-full pointer-events-none"
@@ -225,7 +229,8 @@ export default function FeaturedSection() {
             <Suspense fallback={<CanvasFallback />}>
               <CoffeeCup3D />
             </Suspense>
-          </motion.div>
+            </motion.div>
+          </RevealSection>
         </div>
       </div>
 
