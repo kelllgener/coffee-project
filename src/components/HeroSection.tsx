@@ -133,10 +133,10 @@ export default function HeroSection() {
               color: 'var(--color-coffee-black)',
               fontFamily: 'var(--font-body)',
               letterSpacing: '0.05em',
-              paddingLeft: '2rem',
-              paddingRight: '2rem',
-              paddingTop: '0.875rem',
-              paddingBottom: '0.875rem',
+              paddingLeft: '1.25rem',
+              paddingRight: '1.25rem',
+              paddingTop: '0.5rem',
+              paddingBottom: '0.5rem',
             }}
           >
             Explore the Menu
@@ -154,10 +154,10 @@ export default function HeroSection() {
               fontFamily: 'var(--font-body)',
               letterSpacing: '0.05em',
               background: 'transparent',
-              paddingLeft: '2rem',
-              paddingRight: '2rem',
-              paddingTop: '0.875rem',
-              paddingBottom: '0.875rem',
+              paddingLeft: '1.25rem',
+              paddingRight: '1.25rem',
+              paddingTop: '0.5rem',
+              paddingBottom: '0.5rem',
             }}
           >
             Our Story

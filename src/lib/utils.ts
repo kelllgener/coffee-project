@@ -1,6 +1,8 @@
 import { clsx, type ClassValue } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 import type { Variants } from 'framer-motion'
+import { useRef } from 'react'
+import { useInView } from 'framer-motion'
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -65,4 +67,11 @@ export const scaleIn: Variants = {
     scale: 1,
     transition: { duration: 0.5, ease: 'backOut', delay },
   }),
+}
+
+// ── useReveal hook (for scroll-triggered animations) ───────────────────────
+export function useReveal(margin: string = '-80px') {
+  const ref = useRef<HTMLElement>(null)
+  const isInView = useInView(ref, { once: true, margin })
+  return { ref, isInView }
 }

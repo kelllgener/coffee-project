@@ -8,12 +8,13 @@ import HeroSection from './components/HeroSection'
 import CoffeeGrid from './components/CoffeeGrid'
 import FeaturedSection from './components/FeaturedSection'
 import Footer from './components/Footer'
+import RevealSection from './components/RevealSection'
 
 export default function App() {
   const [loaded, setLoaded] = useState(false)
 
   return (
-    <>
+    <div className="mx-4 md:mx-8">
       {/* Loading screen — unmounts after animation completes */}
       <LoadingScreen onComplete={() => setLoaded(true)} />
 
@@ -33,10 +34,12 @@ export default function App() {
               <CoffeeGrid />
               <FeaturedSection />
             </main>
-            <Footer />
+            <RevealSection margin="-100px">
+              <Footer />
+            </RevealSection>
           </motion.div>
         )}
       </AnimatePresence>
-    </>
+    </div>
   )
 }
