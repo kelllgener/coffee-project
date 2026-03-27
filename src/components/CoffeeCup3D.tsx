@@ -23,7 +23,7 @@ function SteamParticle({ offset }: { offset: number }) {
     if (!ref.current) return;
     elapsed.current += delta * speed;
     const t = elapsed.current % 3;
-    ref.current.position.y = 1.65 + t * 0.75;
+    ref.current.position.y = 1.43 + t * 0.75;
     ref.current.position.x = Math.sin(t * 2.2 + offset) * sway * (t / 3);
     ref.current.position.z = Math.cos(t * 1.4 + offset) * sway * 0.5 * (t / 3);
     (ref.current.material as THREE.MeshStandardMaterial).opacity = Math.max(0, 0.28 - t * 0.09);
@@ -31,7 +31,7 @@ function SteamParticle({ offset }: { offset: number }) {
   });
 
   return (
-    <mesh ref={ref} position={[0, 1.65, 0]}>
+    <mesh ref={ref} position={[0, 1.43, 0]}>
       <sphereGeometry args={[1, 8, 8]} />
       <meshStandardMaterial
         color="#e8ddd0"
@@ -58,7 +58,7 @@ function CoffeeSurface() {
   });
 
   return (
-    <mesh ref={ref} position={[0, 0.71, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+    <mesh ref={ref} position={[0, 0.48, 0]} rotation={[-Math.PI / 2, 0, 0]}>
       <circleGeometry args={[0.555, 64]} />
       <meshStandardMaterial color="#1a0a04" roughness={0.22} metalness={0.05} />
     </mesh>
@@ -68,7 +68,7 @@ function CoffeeSurface() {
 // ── Crema ring ────────────────────────────────────────────────────────────
 function CremaRing() {
   return (
-    <mesh position={[0, 0.715, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+    <mesh position={[0, 0.485, 0]} rotation={[-Math.PI / 2, 0, 0]}>
       <ringGeometry args={[0.35, 0.555, 64]} />
       <meshStandardMaterial
         color="#7a4822"
@@ -127,7 +127,7 @@ function LatteArt() {
   }, []);
 
   return (
-    <mesh position={[0, 0.716, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+    <mesh position={[0, 0.486, 0]} rotation={[-Math.PI / 2, 0, 0]}>
       <circleGeometry args={[0.50, 64]} />
       <meshStandardMaterial
         map={texture}
@@ -215,7 +215,7 @@ function CupLabel() {
   }, []);
 
   return (
-    <mesh position={[0, 0.08, 0.625]} rotation={[0, 0, 0]}>
+    <mesh position={[0, 0.06, 0.625]} rotation={[0, 0, 0]}>
       <planeGeometry args={[0.82, 0.72]} />
       <meshStandardMaterial
         map={texture}
@@ -239,10 +239,9 @@ function RibbedCupBody() {
     const segs = 48;
     for (let i = 0; i <= segs; i++) {
       const t     = i / segs;
-      const y     = -0.74 + t * 1.48;
+      const y     = -0.52 + t * 1.04;
       const baseR = 0.46 + t * 0.14;
-      const rib   = Math.sin(t * Math.PI * 14) * 0.018 * Math.sin(t * Math.PI);
-      pts.push(new THREE.Vector2(baseR + rib, y));
+      pts.push(new THREE.Vector2(baseR, y));
     }
     return new THREE.LatheGeometry(pts, 80);
   }, []);
@@ -252,7 +251,7 @@ function RibbedCupBody() {
     const segs = 48;
     for (let i = 0; i <= segs; i++) {
       const t = i / segs;
-      pts.push(new THREE.Vector2(0.41 + t * 0.12, -0.70 + t * 1.40));
+      pts.push(new THREE.Vector2(0.41 + t * 0.12, -0.48 + t * 0.98));
     }
     return new THREE.LatheGeometry(pts, 64);
   }, []);
@@ -302,7 +301,6 @@ function CupBody({ hovered }: { hovered: boolean }) {
   const groupRef = useRef<THREE.Group>(null);
   const { mouse } = useThree();
 
-  const accentGold  = "#c9873a";
   const saucerColor = "#cbb890";
   const baseColor   = "#9a7850";
 
@@ -327,54 +325,18 @@ function CupBody({ hovered }: { hovered: boolean }) {
       <RibbedCupBody />
 
       {/* Cup base disk */}
-      <mesh position={[0, -0.74, 0]} castShadow>
+      <mesh position={[0, -0.52, 0]} castShadow>
         <cylinderGeometry args={[0.46, 0.44, 0.05, 64]} />
         <meshStandardMaterial color={baseColor} roughness={0.65} metalness={0} />
-      </mesh>
-
-      {/* Gold rim torus */}
-      <mesh position={[0, 0.745, 0]}>
-        <torusGeometry args={[0.605, 0.022, 20, 80]} />
-        <meshStandardMaterial color={accentGold} roughness={0.18} metalness={0.55} />
-      </mesh>
-
-      {/* Rim top face */}
-      <mesh position={[0, 0.748, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-        <ringGeometry args={[0.58, 0.625, 80]} />
-        <meshStandardMaterial color={accentGold} roughness={0.18} metalness={0.55} />
       </mesh>
 
       {/* ── C-shaped handle ── */}
       <CupHandle />
 
       {/* ── Saucer ── */}
-      <mesh position={[0, -0.82, 0]} castShadow>
+      <mesh position={[0, -0.60, 0]} castShadow>
         <cylinderGeometry args={[1.10, 1.00, 0.10, 80]} />
         <meshStandardMaterial color={saucerColor} roughness={0.5} metalness={0} />
-      </mesh>
-
-      {/* Saucer top face ring */}
-      <mesh position={[0, -0.768, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-        <ringGeometry args={[0.70, 1.10, 80]} />
-        <meshStandardMaterial color={saucerColor} roughness={0.45} metalness={0} />
-      </mesh>
-
-      {/* Saucer center well */}
-      <mesh position={[0, -0.767, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-        <circleGeometry args={[0.70, 64]} />
-        <meshStandardMaterial color={baseColor} roughness={0.6} metalness={0} />
-      </mesh>
-
-      {/* Saucer rim gold accent */}
-      <mesh position={[0, -0.772, 0]}>
-        <torusGeometry args={[1.05, 0.014, 14, 80]} />
-        <meshStandardMaterial color={accentGold} roughness={0.18} metalness={0.55} />
-      </mesh>
-
-      {/* Saucer inner gold ring */}
-      <mesh position={[0, -0.768, 0]}>
-        <torusGeometry args={[0.70, 0.010, 12, 64]} />
-        <meshStandardMaterial color={accentGold} roughness={0.2} metalness={0.5} />
       </mesh>
 
       {/* ── Coffee surface + crema + latte art ── */}
